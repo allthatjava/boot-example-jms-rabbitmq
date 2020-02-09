@@ -1,0 +1,16 @@
+---
+spring:
+  profiles: default
+  rabbitmq:
+    host: 192.168.99.100
+    port: 5672
+    username: guest
+    password: guest
+---
+spring:
+  profiles: development
+  rabbitmq:
+    host:
+    port: 5672
+    username:
+    password:

@@ -18,6 +18,8 @@ public class MessageListener {
         newProp.setReplyTo( msgProp.getReplyTo() );
         newProp.setCorrelationId(msgProp.getCorrelationId());
 
+        System.out.println("Received: "+received);
+
         return new Message(("Received: "+received).getBytes(), newProp);
     }
 }
