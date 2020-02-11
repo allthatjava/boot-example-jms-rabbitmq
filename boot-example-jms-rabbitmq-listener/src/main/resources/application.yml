@@ -8,6 +8,10 @@ spring:
     password: guest
 server:
   port: 8081
+brian:
+  mq:
+    protocol: http
+    port: 15672
 ---
 spring:
   profiles: development
@@ -16,3 +20,7 @@ spring:
     port: 5672
     username:
     password:
+brian:
+  mq:
+    protocol: https
+    port: 80

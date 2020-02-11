@@ -3,4 +3,6 @@ applications:
   - name: boot-example-jms-rabbitmq-listener
     path: target/boot-example-jms-rabbitmq-listener-0.0.1-SNAPSHOT.jar
     environment:
-      SPRING_PROFILES_ACTIVE: development
+      SPRING_PROFILES_ACTIVE: developmentz
+    services:
+      - rabbitMQ
