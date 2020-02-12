@@ -1,6 +1,6 @@
 package brian.example.boot.jms.rabbitmq.client.controller;
 
-import brian.example.boot.jms.rabbitmq.client.config.RabbitJmsConfig;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -10,8 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
+@Slf4j
 @RestController
 public class ClientController {
+
+    public static final String EXCHANGE_NAME = "brian-exchange";
+    public static final String QUEUE_NAME = "brian-queue";
 
     private final RabbitTemplate rabbitTemplate;
 
@@ -22,16 +26,15 @@ public class ClientController {
     @GetMapping( "/hello/{name}" )
     public String sendHello(@PathVariable("name") String name) {
 
-        System.out.println("Web Sending message...");
+        log.info("Web Sending message...");
 
         MessageProperties msgProp = new MessageProperties();
         msgProp.setCorrelationId(UUID.randomUUID().toString());
-        msgProp.setConsumerQueue(RabbitJmsConfig.QUEUE_NAME);
+        msgProp.setConsumerQueue(QUEUE_NAME);
 
         Message msg = new Message(name.getBytes(), msgProp);
-
-        Message res = rabbitTemplate.sendAndReceive(RabbitJmsConfig.TOPIC_EXCHANGE_NAME,
-                                            "foo.bar.baz", msg);
+        Message res = rabbitTemplate.sendAndReceive(EXCHANGE_NAME,
+                                            "foo.bar.1", msg);
 
         String retStr = "";
         if( res != null )
@@ -39,9 +42,18 @@ public class ClientController {
         else
             retStr = "Web res is null";
 
-        System.out.println(retStr);
+        log.info(retStr);
 
         return retStr;
+    }
+
+    /**
+     * This is to see VCAP service info on PCF
+     * @return
+     */
+    @GetMapping("/vcap")
+    public String vcap(){
+        return System.getenv("VCAP_SERVICES");
     }
 
     @GetMapping( "/hello" )

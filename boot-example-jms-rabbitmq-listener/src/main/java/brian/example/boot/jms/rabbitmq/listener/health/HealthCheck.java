@@ -51,7 +51,7 @@ public class HealthCheck implements HealthIndicator {
     private boolean sentDummyMessage(){
         boolean isUp = true;
         try {
-            rabbitTemplate.convertAndSend(RabbitJmsConfig.TOPIC_EXCHANGE_NAME,"HealthCheck");
+            rabbitTemplate.convertAndSend(RabbitJmsConfig.EXCHANGE_NAME,"HealthCheck");
 //            MessageProperties msgProp = new MessageProperties();
 //            msgProp.setCorrelationId(UUID.randomUUID().toString());
 //            msgProp.setConsumerQueue(RabbitJmsConfig.QUEUE_NAME);

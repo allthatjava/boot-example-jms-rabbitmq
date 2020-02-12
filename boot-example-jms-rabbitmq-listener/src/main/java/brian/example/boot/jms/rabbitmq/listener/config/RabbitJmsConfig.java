@@ -5,13 +5,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -26,7 +22,7 @@ import java.util.regex.Pattern;
 @Configuration
 public class RabbitJmsConfig {
 
-    public static final String TOPIC_EXCHANGE_NAME = "brian-topic-exchange";
+    public static final String EXCHANGE_NAME = "brian-exchange";
     public static final String QUEUE_NAME = "brian-queue";
 
     @Autowired
@@ -39,14 +35,22 @@ public class RabbitJmsConfig {
     }
 
     @Bean
-    TopicExchange exchange() {
-        return new TopicExchange(TOPIC_EXCHANGE_NAME);
+    DirectExchange exchange(){
+        return new DirectExchange(EXCHANGE_NAME);
     }
+//    @Bean //--> If you want to use Topic instead of Direct
+//    TopicExchange exchange() {
+//        return new TopicExchange(EXCHANGE_NAME);
+//    }
 
     @Bean
-    Binding binding(Queue queue, TopicExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with("foo.bar.#");
+    Binding binding(Queue queue, DirectExchange exchange) {
+        return BindingBuilder.bind(queue).to(exchange).with("foo.bar.1");
     }
+//    @Bean //--> If you want to use Topic instead of Direct
+//    Binding binding(Queue queue, TopicExchange exchange) {
+//        return BindingBuilder.bind(queue).to(exchange).with("foo.bar.#");
+//    }
     //<===================================================================
 
 
